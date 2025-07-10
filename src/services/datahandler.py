@@ -5,7 +5,7 @@ from src.models.usuario import Usuario
 from src.models.tarea import Tarea
 from src.models.asignacion import Asignacion
 from src.models.dependencia import Dependencia
-
+import uuid
 from fastapi import HTTPException, status
 
 
@@ -29,31 +29,29 @@ def obtener_usuario_con_tareas(db: Session, alias: str):
 
 
 # Crear tarea y asignar usuario inicial
-def crear_tarea(db: Session, nombre: str, descripcion: str, alias_usuario: str, rol: str):
-    usuario = db.query(Usuario).filter_by(alias=alias_usuario).first()
-    if not usuario:
-        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+def crear_tarea(db: Session, nombre: str, descripcion: str, usuario: str, rol: str):
+    user = db.query(Usuario).filter_by(alias=usuario).first()
+    if not user:
+        raise ValueError("Usuario no encontrado")
 
-    tarea = Tarea(
+    tarea_id = str(uuid.uuid4())
+    nueva_tarea = Tarea(
+        id=tarea_id,
         nombre=nombre,
-        descripcion=descripcion,
-        estado="nueva",
-        fecha_esperada_fin=datetime.utcnow()
+        description=descripcion,
+        fecha_esperada_fin=datetime.now(), 
     )
-    db.add(tarea)
-    db.commit()
-    db.refresh(tarea)
+    db.add(nueva_tarea)
+    db.flush()  
 
     asignacion = Asignacion(
-        user_id=usuario.id,
-        tarea_id=tarea.id,
-        rol=rol,
-        fecha_asignacion=datetime.utcnow()
+        task_id=tarea_id,
+        user_id=user.id,
+        rol=rol
     )
     db.add(asignacion)
     db.commit()
-
-    return tarea
+    return tarea_id
 
 
 # Cambiar estado de la tarea

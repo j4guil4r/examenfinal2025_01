@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import datetime
-from schemas.asignacion import AsignacionOut  
+from src.schemas.asignacion import AsignacionOut  
 
 class TareaBase(BaseModel):
     nombre: str
