@@ -22,3 +22,4 @@ class TareaOut(TareaBase):
 
     class Config:
         orm_mode = True
+

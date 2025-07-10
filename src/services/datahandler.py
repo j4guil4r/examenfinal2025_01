@@ -92,12 +92,12 @@ def modificar_usuario_en_tarea(db: Session, tarea_id: str, alias_usuario: str, r
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
-    asignacion = db.query(Asignacion).filter_by(user_id=usuario.id, tarea_id=tarea.id).first()
+    asignacion = db.query(Asignacion).filter_by(user_id=usuario.id, task_id=tarea.id).first()
 
     if accion == "adicionar":
         if asignacion:
             raise HTTPException(status_code=422, detail="Usuario ya asignado")
-        nueva = Asignacion(user_id=usuario.id, tarea_id=tarea.id, rol=rol, fecha_asignacion=datetime.utcnow())
+        nueva = Asignacion(user_id=usuario.id, task_id=tarea.id, rol=rol, fecha_asignacion=datetime.now())
         db.add(nueva)
         db.commit()
     elif accion == "remover":
@@ -107,8 +107,9 @@ def modificar_usuario_en_tarea(db: Session, tarea_id: str, alias_usuario: str, r
         db.commit()
 
     # Validar que quede al menos un usuario
-    if not db.query(Asignacion).filter_by(tarea_id=tarea.id).first():
+    if not db.query(Asignacion).filter_by(task_id=tarea.id).first():
         raise HTTPException(status_code=422, detail="La tarea debe tener al menos un usuario asignado")
+
 
 
 # Agregar o remover dependencia
