@@ -11,3 +11,6 @@ class Usuario(Base):
 
     tareas_asociadas = relationship("Asignacion", back_populates="usuario", cascade="all, delete-orphan")
 
+    @property
+    def tareas(self):
+        return [asig.tarea for asig in self.tareas_asociadas if asig.tarea]

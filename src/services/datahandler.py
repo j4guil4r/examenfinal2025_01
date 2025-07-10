@@ -7,6 +7,7 @@ from src.models.asignacion import Asignacion
 from src.models.dependencia import Dependencia
 import uuid
 from fastapi import HTTPException, status
+from sqlalchemy.orm import joinedload
 
 
 # Crear usuario
@@ -22,9 +23,14 @@ def crear_usuario(db: Session, alias: str, nombre: str):
 
 # Obtener usuario con sus tareas
 def obtener_usuario_con_tareas(db: Session, alias: str):
-    usuario = db.query(Usuario).filter_by(alias=alias).first()
+    usuario = db.query(Usuario)\
+        .options(joinedload(Usuario.tareas_asociadas).joinedload(Asignacion.tarea))\
+        .filter_by(alias=alias)\
+        .first()
+    
     if not usuario:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    
     return usuario
 
 

@@ -5,7 +5,7 @@ from src.schemas.asignacion import AsignacionOut
 
 class TareaBase(BaseModel):
     nombre: str
-    descripcion: str
+    description: str
     fecha_esperada_fin: Optional[datetime] = None
 
 class TareaCreate(TareaBase):
