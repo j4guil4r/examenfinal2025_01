@@ -19,3 +19,4 @@ class Tarea(Base):
     fecha_esperada_fin = Column(DateTime, nullable=False)
 
     usuarios_asignados = relationship("Asignacion", back_populates="tarea", cascade="all, delete-orphan")
+    dependencias = relationship("Dependencia", back_populates="tarea", cascade="all, delete-orphan")
