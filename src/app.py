@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from src.config.settings import settings
 from src.db.database import init_db
+from src.controllers import usuarios_controller
 
 app = FastAPI(
     title="Microservicio de Cursos",
@@ -11,5 +12,5 @@ app = FastAPI(
 def startup():
     init_db()
 
-#app.include_router(cursos.router, prefix="/cursos", tags=["cursos"])
+app.include_router(usuarios_controller.router, prefix="/usuarios", tags=["usuarios"])
 #app.include_router(inscripciones.router, prefix="/inscripciones", tags=["inscripciones"])
