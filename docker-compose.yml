@@ -32,6 +32,20 @@ services:
       DATABASE_URL: postgresql://usuario:contraseña@db:5432/examenfinal
       PYTHONPATH: /app
     restart: unless-stopped
+  
+  test:
+    build: .
+    container_name: currency_exchange_tests
+    environment:
+      DATABASE_URL: postgresql://usuario:contraseña@db:5432/examenfinal
+      PYTHONPATH: /app 
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: pytest
 
 volumes:
   postgres_data:

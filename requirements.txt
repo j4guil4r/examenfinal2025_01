@@ -6,3 +6,5 @@ python-dotenv==1.0.1
 pydantic==2.7.1
 requests==2.31.0
 python-jose==3.3.0
+pytest
+pytest-cov
