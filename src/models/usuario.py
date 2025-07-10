@@ -1,12 +1,13 @@
-class Usuario:
-    def __init__(self, user_id, name, email):
-        self.id = user_id
-        self.name = name
-        self.email = email
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+from src.db.database import Base
 
-    def get_user_info(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "email": self.email
-        }
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column(Integer, primary_key=True, index=True)
+    alias = Column(String, unique=True, nullable=False)  # antes era "contacto"
+    nombre = Column(String, nullable=False)
+
+    tareas_asociadas = relationship("Asignacion", back_populates="usuario", cascade="all, delete-orphan")
+
